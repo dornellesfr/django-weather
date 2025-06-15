@@ -53,4 +53,5 @@ dev = "python manage.py runserver"
 pre_test = "task lint"
 test = "pytest -s -x --cov=feels_website_api -vv"
 post_test = "coverage html"
+new_app = "python manage.py startapp"
 
