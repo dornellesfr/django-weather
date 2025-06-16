@@ -3,9 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'global.css' %}">
+    <link rel="stylesheet" href="{% static 'weather/index.css' %}">
+    <title>Weather monitoring</title>
 </head>
 <body>
-    <h1>{{ title }}</h1>
+    <main>
+        <header>
+            <h1>Set up a weather alert</h1>
+        </header>
+        <form>
+            <div>
+                <label for="email" class="input-label">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="input-field" 
+                    placeholder="your-email@example.com"
+                >
+            </div>
+            <div>
+                <label for="Location" class="input-label">Location</label>
+                <input 
+                    type="text" 
+                    id="location" 
+                    name="location" 
+                    class="input-field" 
+                    placeholder="Enter location"
+                >
+            </div>
+            <div>
+                <label for="Temperature" class="input-label">Temperature</label>
+                <input 
+                    type="text" 
+                    id="temperature" 
+                    name="temperature" 
+                    class="input-field" 
+                    placeholder="Enter temperature"
+                >
+            </div>
+            <div>
+                <label for="period" class="input-label">Period</label>
+                <select 
+                    id="period" 
+                    name="period" 
+                    class="input-field" 
+                >
+                    <option value="15">15 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">1 hour</option>
+            </select>
+            </div>
+        </form>
+        <footer>
+            <button class="btn primary" href=''>Set alert</button>
+            <a class="btn secondary" href="{% url 'weather:history' %}">See alerts done</a>
+            <a class="btn secondary" href="{% url 'home' %}">Back</a>
+        </footer>
+    </main>
 </body>
 </html>

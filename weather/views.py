@@ -3,10 +3,7 @@ from django.shortcuts import render
 
 
 def home_weather(request: HttpRequest) -> HttpResponse:
-    context = {
-        'title': 'Home in Weather',
-    }
-    return render(request, 'weather/index.html', context)
+    return render(request, 'weather/index.html')
 
 
 def history_weather(request: HttpRequest) -> HttpResponse:
