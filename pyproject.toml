@@ -1,0 +1,65 @@
+[project]
+name = "django-weather"
+version = "0.1.0"
+description = "Project to display weather information using Django"
+authors = [
+    { name = "Fernando Dornelles Rocha", email = "fdornellesr@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "apscheduler>=3.11.0",
+    "django>=5.2.3",
+    "openmeteo-requests>=1.5.0",
+    "requests-cache>=1.2.1",
+    "retry-requests>=2.0.0",
+    "gunicorn>=23.0.0",
+    "whitenoise>=6.8.2",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.0",
+    "pytest-cov>=6.2.1",
+    "ruff>=0.11.13",
+    "taskipy>=1.14.1",
+]
+
+[tool.ruff]
+line-length = 88
+extend-exclude = ["migrations", "manage.py"]
+
+[tool.ruff.lint]
+preview = true
+select = [
+    "I",
+    "F",
+    "E",
+    "W",
+    "PL",
+    "PT",
+    "DJ",
+]
+
+[tool.ruff.format]
+preview = true
+quote-style = "single"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+[tool.taskipy.tasks]
+lint = "ruff check ."
+pre_format = "ruff check --fix"
+format = "ruff format ."
+dev = "python manage.py runserver"
+pre_test = "task lint"
+test = "pytest -s -x --cov=feels_website_api -vv"
+post_test = "coverage html"
+new_app = "python manage.py startapp"
+migrations = "python manage.py makemigrations"
+post_migrations = "python manage.py migrate"
+

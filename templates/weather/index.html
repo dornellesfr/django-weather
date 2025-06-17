@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'global.css' %}">
+    <link rel="stylesheet" href="{% static 'weather/index.css' %}">
+    <title>Weather monitoring</title>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Set up a weather alert</h1>
+        </header>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <footer>
+                <button class="btn primary" type="submit">Set alert</button>
+                <a class="btn secondary" href="{% url 'weather:history' %}">See alerts done</a>
+                <a class="btn secondary" href="{% url 'home' %}">Back</a>
+            </footer>
+        </form>
+    </main>
+</body>
+</html>

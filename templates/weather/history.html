@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'global.css' %}">
+    <link rel="stylesheet" href="{% static 'weather/history.css' %}">
+    <title>History</title>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>History of Weather Alerts</h1>
+        </header>
+        
+        <form method="get" action="{% url 'weather:history' %}">
+            <div>
+                <label for="email" class="input-label">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="input-field" 
+                    placeholder="your-email@example.com"
+                    value="{{ email_search|default:'' }}"
+                >
+                <button class="btn primary" type="submit">Search</button>
+                <a href="{% url 'weather:home' %}" class="btn secondary">Back</a>
+            </div>
+        </form>
+
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if temperatures %}
+            <section class="results">
+                <h2>Results for: {{ email_search }}</h2>
+                <div class="temperature-list">
+                    {% for temp in temperatures %}
+                        <div class="temperature-card">
+                            <h3>{{ temp.place }}</h3>
+                            <p><strong>Temperature:</strong> {{ temp.temperature }}°C</p>
+                            <p><strong>Email:</strong> {{ temp.email }}</p>
+                            <p><strong>Date:</strong> {{ temp.created_at|date:"d/m/Y H:i" }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>
