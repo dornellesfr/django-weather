@@ -21,6 +21,10 @@ RUN mkdir -p /app/staticfiles
 
 RUN uv run python manage.py collectstatic --noinput --clear
 
+RUN python manage.py makemigrations
+
+RUN python manage.py migrate
+
 EXPOSE 8000
 
 CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
