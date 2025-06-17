@@ -7,7 +7,10 @@ import requests
 import requests_cache
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from django.core.mail import send_mail
+from django.conf import settings
 from retry_requests import retry
+
 from .models import Temperature
 
 
@@ -51,6 +54,26 @@ def get_coordinates(place_name: str):
             raise Exception(Error)
     else:
         raise Exception('Erro ao consultar coordenadas.')
+    
+
+def send_temperature_alert(email, place, current_temp, max_temp):
+    try:
+        subject = f'Alerta de Temperatura - {place}'
+        
+        message = f'A temperatura atual em {place} é {current_temp}°C, que excede o limite de {max_temp}°C.'
+        
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=False,
+        )
+        
+        return True
+        
+    except Exception as e:
+        return e
 
 
 scheduler = BackgroundScheduler()
@@ -59,8 +82,8 @@ scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
 
-def add_temperature_monitoring(email, place, lat, lon, max_temp, interval_minutes):
-    job_id = f"temp_monitor_{email}_{place}_{lat}_{lon}_{max_temp}_{interval_minutes}"
+def add_temperature_monitoring(items: dict):
+    job_id = f"temp_monitor_{items['email']}_{items['place']}_{items['lat']}_{items['lon']}_{items['max_temp']}_{items['interval_minutes']}"
 
     try:
         scheduler.remove_job(job_id)
@@ -69,8 +92,8 @@ def add_temperature_monitoring(email, place, lat, lon, max_temp, interval_minute
 
     scheduler.add_job(
         func=check_temperature,
-        trigger=IntervalTrigger(minutes=interval_minutes),
-        args=[email, place, lat, lon, max_temp],
+        trigger=IntervalTrigger(minutes=items['interval_minutes']),
+        args=[items['email'], items['place'], items['lat'], items['lon'], items['max_temp']],
         id=job_id,
         max_instances=1,
         misfire_grace_time=30
@@ -90,5 +113,7 @@ def check_temperature(email, place, lat, lon, max_temp):
                 temperature=temperature,
             )
             print(f'Temperatura atingida: {temperature}°C')
+            const = send_temperature_alert(email, place, temperature, max_temp)
+            print(f'Email enviado: {const}')
     except Exception as e:
         print(f'Erro: {str(e)}')

@@ -13,7 +13,8 @@
         <header>
             <h1>History of Weather Alerts</h1>
         </header>
-        <form action="">
+        
+        <form method="get" action="{% url 'weather:history' %}">
             <div>
                 <label for="email" class="input-label">Email</label>
                 <input 
@@ -22,9 +23,36 @@
                     name="email" 
                     class="input-field" 
                     placeholder="your-email@example.com"
+                    value="{{ email_search|default:'' }}"
                 >
+                <button class="btn primary" type="submit">Search</button>
+                <a href="{% url 'weather:home' %}" class="btn secondary">Back</a>
             </div>
         </form>
+
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if temperatures %}
+            <section class="results">
+                <h2>Results for: {{ email_search }}</h2>
+                <div class="temperature-list">
+                    {% for temp in temperatures %}
+                        <div class="temperature-card">
+                            <h3>{{ temp.place }}</h3>
+                            <p><strong>Temperature:</strong> {{ temp.temperature }}°C</p>
+                            <p><strong>Email:</strong> {{ temp.email }}</p>
+                            <p><strong>Date:</strong> {{ temp.created_at|date:"d/m/Y H:i" }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
     </main>
 </body>
 </html>

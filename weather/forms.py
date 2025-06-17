@@ -41,7 +41,7 @@ class TemperatureForms(forms.Form):
             raise forms.ValidationError(f'Não foi possível encontrar o local: {e}')
 
         return place
-    
+
     def clean_interval(self):
         interval = self.cleaned_data['interval']
         return int(interval)

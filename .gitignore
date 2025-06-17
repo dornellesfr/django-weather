@@ -7,6 +7,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+.cache.sqlite
 .Python
 build/
 develop-eggs/
