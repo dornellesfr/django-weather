@@ -53,14 +53,14 @@ def get_coordinates(place_name: str):
         except Error:
             raise Exception(Error)
     else:
-        raise Exception('Erro ao consultar coordenadas.')
+        raise Exception('Error when searching coordinates.')
     
 
 def send_temperature_alert(email, place, current_temp, max_temp):
     try:
-        subject = f'Alerta de Temperatura - {place}'
-        
-        message = f'A temperatura atual em {place} é {current_temp}°C, que excede o limite de {max_temp}°C.'
+        subject = f'Temperature Alert - {place}'
+
+        message = f'The current temperature in {place} is {current_temp}°C, and you\'ve set the limit to {max_temp}°C.'
         
         send_mail(
             subject=subject,
@@ -112,8 +112,7 @@ def check_temperature(email, place, lat, lon, max_temp):
                 place=place,
                 temperature=temperature,
             )
-            print(f'Temperatura atingida: {temperature}°C')
-            const = send_temperature_alert(email, place, temperature, max_temp)
-            print(f'Email enviado: {const}')
+            print(f'Temperature: {temperature}°C')
+            send_temperature_alert(email, place, temperature, max_temp)
     except Exception as e:
         print(f'Erro: {str(e)}')
