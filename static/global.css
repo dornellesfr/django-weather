@@ -55,7 +55,7 @@ body {
     border-color: #007bff;
 }
 
-.input-label {
+label {
     display: block;
     font-size: 14px;
     font-weight: 500;
@@ -63,7 +63,7 @@ body {
     width: 100%;
 }
 
-.input-field {
+input, select {
     width: 100%;
     padding: 12px 16px;
     border: 1px solid #e1e5e9;
@@ -74,12 +74,12 @@ body {
     transition: border-color 0.3s ease;
 }
 
-.input-field:focus {
+input:focus, select:focus {
     outline: none;
     border-color: #007bff;
 }
 
-.input-field::placeholder {
+input::placeholder, select::placeholder {
     color: #6c757d;
     opacity: 1;
 }
