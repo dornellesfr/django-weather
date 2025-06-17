@@ -8,7 +8,11 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "apscheduler>=3.11.0",
     "django>=5.2.3",
+    "openmeteo-requests>=1.5.0",
+    "requests-cache>=1.2.1",
+    "retry-requests>=2.0.0",
 ]
 
 [dependency-groups]
@@ -54,4 +58,6 @@ pre_test = "task lint"
 test = "pytest -s -x --cov=feels_website_api -vv"
 post_test = "coverage html"
 new_app = "python manage.py startapp"
+migrations = "python manage.py makemigrations"
+post_migrations = "python manage.py migrate"
 
