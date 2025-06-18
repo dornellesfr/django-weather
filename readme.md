@@ -6,6 +6,8 @@ Aplicação web Django para exibir informações meteorológicas usando a API Op
 
 Projeto com o objetivo de selecionar uma localidade e pegar a informação de temperatura dela a cada período determinado.
 
+[Deploy em funcionamento da aplicação](https://django-weather-4vb9.onrender.com)
+
 ##  Tecnologias Utilizadas
 
 - **Python 3.13**
