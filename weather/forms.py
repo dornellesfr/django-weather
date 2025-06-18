@@ -6,7 +6,7 @@ from .services import get_coordinates
 class TemperatureForms(forms.Form):
     email = forms.EmailField(
         max_length=255,
-        label='Email',
+        label='E-mail',
         widget=forms.EmailInput(attrs={'placeholder': 'Type your email'}),
     )
     place = forms.CharField(
@@ -15,7 +15,7 @@ class TemperatureForms(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': 'Type a city name'}),
     )
     max_temperature = forms.IntegerField(
-        label='Temperatura Máxima',
+        label='Max temperature',
         widget=forms.NumberInput(attrs={'placeholder': 'Type the maximum temperature'}),
     )
     interval = forms.ChoiceField(

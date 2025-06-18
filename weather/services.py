@@ -7,8 +7,8 @@ import requests
 import requests_cache
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
-from django.core.mail import send_mail
 from django.conf import settings
+from django.core.mail import send_mail
 from retry_requests import retry
 
 from .models import Temperature
@@ -54,14 +54,16 @@ def get_coordinates(place_name: str):
             raise Exception(Error)
     else:
         raise Exception('Error when searching coordinates.')
-    
+
 
 def send_temperature_alert(email, place, current_temp, max_temp):
     try:
         subject = f'Temperature Alert - {place}'
 
-        message = f'The current temperature in {place} is {current_temp}°C, and you\'ve set the limit to {max_temp}°C.'
-        
+        message = (
+            f'The current temperature in {place} is {current_temp}°C, and you\'ve set the limit to {max_temp}°C.'
+        )
+
         send_mail(
             subject=subject,
             message=message,
@@ -69,9 +71,9 @@ def send_temperature_alert(email, place, current_temp, max_temp):
             recipient_list=[email],
             fail_silently=False,
         )
-        
+
         return True
-        
+
     except Exception as e:
         return e
 
@@ -82,18 +84,28 @@ scheduler.start()
 atexit.register(lambda: scheduler.shutdown())
 
 
-def add_temperature_monitoring(items: dict):
-    job_id = f"temp_monitor_{items['email']}_{items['place']}_{items['lat']}_{items['lon']}_{items['max_temp']}_{items['interval_minutes']}"
-
-    try:
+def stop_scheduler(job_id: str):
+    if scheduler and scheduler.get_job(job_id):
         scheduler.remove_job(job_id)
-    except:
-        pass
+        return True
+    return False
+
+
+def add_temperature_monitoring(items: dict):
+    job_id = f"{items['email']}"
+
+    if scheduler.get_job(job_id):
+        return
 
     scheduler.add_job(
         func=check_temperature,
         trigger=IntervalTrigger(minutes=items['interval_minutes']),
-        args=[items['email'], items['place'], items['lat'], items['lon'], items['max_temp']],
+        args=(
+            [items['email'],
+             items['place'],
+             items['lat'],
+             items['lon'],
+             items['max_temp']]),
         id=job_id,
         max_instances=1,
         misfire_grace_time=30

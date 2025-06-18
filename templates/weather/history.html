@@ -26,9 +26,21 @@
                     value="{{ email_search|default:'' }}"
                 >
                 <button class="btn primary" type="submit">Search</button>
+                <!-- <button class="btn primary" type="submit">Finish Monitoring</button> -->
                 <a href="{% url 'weather:home' %}" class="btn secondary">Back</a>
             </div>
         </form>
+
+        {% if email_search %}
+        <form method="post" action="{% url 'weather:stop_monitoring' %}">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ email_search }}">
+            <button class="btn primary" type="submit" 
+                    onclick="return confirm('Stop monitoring for {{ email_search }}?')">
+                Stop Monitoring
+            </button>
+        </form>
+        {% endif %}
 
         {% if messages %}
             <div>

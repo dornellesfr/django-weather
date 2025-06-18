@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 from weather.forms import TemperatureForms
 
 from .models import Temperature
-from .services import add_temperature_monitoring
+from .services import add_temperature_monitoring, stop_scheduler
 
 
 def home_weather(request):
@@ -62,3 +62,17 @@ def history_weather(request: HttpRequest) -> HttpResponse:
     }
 
     return render(request, 'weather/history.html', context)
+
+def stop_monitoring(request: HttpRequest) -> HttpResponse:
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        
+        if email:
+            if stop_scheduler(email):
+                messages.success(request, f'Monitoring stopped for: {email}')
+            else:
+                messages.warning(request, f'No monitoring found for: {email}')
+        else:
+            messages.error(request, 'Email not provided.')
+
+    return redirect('weather:history')
