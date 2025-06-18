@@ -21,9 +21,9 @@ RUN mkdir -p /app/staticfiles
 
 RUN uv run python manage.py collectstatic --noinput --clear
 
-RUN python manage.py makemigrations
+RUN uv run python manage.py makemigrations
 
-RUN python manage.py migrate
+RUN uv run python manage.py migrate
 
 EXPOSE 8000
 
